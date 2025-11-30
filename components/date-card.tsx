@@ -35,36 +35,36 @@ export function DateCard({ date, responses }: DateCardProps) {
   const ifNeedBeVotes = responses.filter((r) => r.response === 'if-need-be');
 
   return (
-    <Card className="w-[350px]">
+    <Card className="w-[450px]">
       <CardHeader>
-        <CardTitle>{date}</CardTitle>
+        <CardTitle className="text-center text-2xl">{date}</CardTitle>
       </CardHeader>
       <CardContent className="grid grid-cols-3 gap-4">
         <div>
-          <h3 className="font-bold mb-2">Yes ({yesVotes.length})</h3>
+          <h3 className="font-bold mb-2 whitespace-nowrap text-center">Yes ({yesVotes.length})</h3>
           <ul>
             {yesVotes.map((voter) => (
-              <li key={voter.name} className={getResponseColor(voter.response)}>
+              <li key={voter.name} className={`${getResponseColor(voter.response)} truncate`}>
                 {voter.name}
               </li>
             ))}
           </ul>
         </div>
         <div>
-          <h3 className="font-bold mb-2">If Need Be ({ifNeedBeVotes.length})</h3>
+          <h3 className="font-bold mb-2 whitespace-nowrap text-center">If Need Be ({ifNeedBeVotes.length})</h3>
           <ul>
             {ifNeedBeVotes.map((voter) => (
-              <li key={voter.name} className={getResponseColor(voter.response)}>
+              <li key={voter.name} className={`${getResponseColor(voter.response)} truncate`}>
                 {voter.name}
               </li>
             ))}
           </ul>
         </div>
         <div>
-          <h3 className="font-bold mb-2">No ({noVotes.length})</h3>
+          <h3 className="font-bold mb-2 whitespace-nowrap text-center">No ({noVotes.length})</h3>
           <ul>
             {noVotes.map((voter) => (
-              <li key={voter.name} className={getResponseColor(voter.response)}>
+              <li key={voter.name} className={`${getResponseColor(voter.response)} truncate`}>
                 {voter.name}
               </li>
             ))}

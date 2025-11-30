@@ -20,7 +20,7 @@ const month = String(MOCK_DATE.getMonth() + 1).padStart(2, '0');
  * This serves as the single source of truth for raw mock data.
  */
 export function getDummyVotes(): VoteEntry[] {
-  return [
+  const dummyVotes: VoteEntry[] = [
     // --- CalendarMonthView specific test cases ---
     // Case 1: Yes, No, If-Need-Be -> Red (priority to 'no')
     { date: `${year}-${month}-01`, voterName: 'PersonA', response: 'yes' },
@@ -46,6 +46,20 @@ export function getDummyVotes(): VoteEntry[] {
     // Original simple Red day
     { date: `${year}-${month}-18`, voterName: 'PersonR', response: 'no' },
 
+    // New test case for alignment checking (10 If Need Be, 1 Yes, 1 No)
+    { date: `${year}-${month}-06`, voterName: 'PersonS', response: 'if-need-be' },
+    { date: `${year}-${month}-06`, voterName: 'PersonT', response: 'if-need-be' },
+    { date: `${year}-${month}-06`, voterName: 'PersonU', response: 'if-need-be' },
+    { date: `${year}-${month}-06`, voterName: 'PersonV', response: 'if-need-be' },
+    { date: `${year}-${month}-06`, voterName: 'PersonW', response: 'if-need-be' },
+    { date: `${year}-${month}-06`, voterName: 'PersonX', response: 'if-need-be' },
+    { date: `${year}-${month}-06`, voterName: 'PersonY', response: 'if-need-be' },
+    { date: `${year}-${month}-06`, voterName: 'PersonZ', response: 'if-need-be' }, // Using 'Z' here, will need to restart alphabet or extend
+    { date: `${year}-${month}-06`, voterName: 'PersonAA', response: 'if-need-be' },
+    { date: `${year}-${month}-06`, voterName: 'PersonBB', response: 'if-need-be' },
+    { date: `${year}-${month}-06`, voterName: 'PersonCC', response: 'yes' },
+    { date: `${year}-${month}-06`, voterName: 'PersonDD', response: 'no' },
+
     // --- DateCard specific sample data ---
     { date: '2025-12-20', voterName: 'PersonJ', response: 'yes' },
     { date: '2025-12-20', voterName: 'PersonK', response: 'yes' },
@@ -53,5 +67,10 @@ export function getDummyVotes(): VoteEntry[] {
     { date: '2025-12-20', voterName: 'PersonM', response: 'no' },
     { date: '2025-12-20', voterName: 'PersonN', response: 'yes' },
     { date: '2025-12-20', voterName: 'PersonO', response: 'if-need-be' },
+
+    // New test case for a very long name in If Need Be and a No voter
+    { date: `${year}-${month}-07`, voterName: 'PersonWithAJokeNameThatsLongAndTryingToBreakThings', response: 'if-need-be' },
+    { date: `${year}-${month}-07`, voterName: 'PersonEE', response: 'no' },
   ];
+  return dummyVotes;
 }

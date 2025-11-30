@@ -5,9 +5,10 @@ import { getDummyVotes, VoteEntry } from '@/lib/test-data/sample-votes'; // Impo
 
 // Helper to get VoterResponse[] for a specific date from raw VoteEntry[]
 function getVoterResponsesForDate(votes: VoteEntry[], date: string): VoterResponse[] {
-  return votes
+  const filteredResponses = votes
     .filter((vote) => vote.date === date)
     .map((vote) => ({ name: vote.voterName, response: vote.response }));
+  return filteredResponses;
 }
 
 describe('DateCard', () => {
@@ -59,5 +60,36 @@ describe('DateCard', () => {
     expect(screen.getByText(/Yes \(3\)/)).toBeInTheDocument();
     expect(screen.getByText(/If Need Be \(2\)/)).toBeInTheDocument();
     expect(screen.getByText(/No \(1\)/)).toBeInTheDocument();
+  });
+
+  // New test case for alignment checking
+  it('renders correctly with mixed and high "If Need Be" counts', () => {
+    const ALIGNMENT_TEST_DATE = '2025-12-06';
+    const alignmentResponses = getVoterResponsesForDate(allDummyVotes, ALIGNMENT_TEST_DATE);
+
+    render(<DateCard date={ALIGNMENT_TEST_DATE} responses={alignmentResponses} />);
+
+    expect(screen.getByText(/Yes \(1\)/)).toBeInTheDocument();
+    expect(screen.getByText(/If Need Be \(10\)/)).toBeInTheDocument();
+    expect(screen.getByText(/No \(1\)/)).toBeInTheDocument();
+
+    expect(screen.getByText('PersonCC')).toBeInTheDocument(); // Yes voter
+    expect(screen.getByText('PersonS')).toBeInTheDocument(); // One of the If Need Be voters
+    expect(screen.getByText('PersonBB')).toBeInTheDocument(); // One of the If Need Be voters
+    expect(screen.getByText('PersonDD')).toBeInTheDocument(); // No voter
+  });
+
+  // New test case for a very long name in If Need Be and a No voter
+  it('renders correctly with a very long "If Need Be" name', () => {
+    const LONG_NAME_TEST_DATE = '2025-12-07'; // Match the date in sample-votes.ts
+    const longNameResponses = getVoterResponsesForDate(allDummyVotes, LONG_NAME_TEST_DATE);
+
+    render(<DateCard date={LONG_NAME_TEST_DATE} responses={longNameResponses} />);
+
+    expect(screen.getByText(/If Need Be \(1\)/)).toBeInTheDocument();
+    expect(screen.getByText(/No \(1\)/)).toBeInTheDocument();
+
+    expect(screen.getByText('PersonWithAJokeNameThatsLongAndTryingToBreakThings')).toBeInTheDocument(); // Long INB voter
+    expect(screen.getByText('PersonEE')).toBeInTheDocument(); // No voter
   });
 });

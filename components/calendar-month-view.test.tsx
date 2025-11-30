@@ -48,50 +48,50 @@ describe('CalendarMonthView', () => {
   it('applies a neutral color for a day with no votes', () => {
     render(<CalendarMonthView allVoteEntries={allDummyVotes} />);
     // Day 10 has no votes in December in our dummy data
-    const dayElement = screen.getByText('10').closest('div');
+    const dayElement = screen.getByText('10').closest('button');
     expect(dayElement).toHaveClass('bg-transparent');
   });
 
   it('applies a green color for a day with all "yes" votes', () => {
     render(<CalendarMonthView allVoteEntries={allDummyVotes} />);
-    const dayElement = screen.getByText('5').closest('div');
+    const dayElement = screen.getByText('5').closest('button');
     expect(dayElement).toHaveClass('bg-green-200');
   });
 
   it('applies a yellow color for a day with "if-need-be" votes', () => {
     render(<CalendarMonthView allVoteEntries={allDummyVotes} />);
-    const dayElement = screen.getByText('12').closest('div');
+    const dayElement = screen.getByText('12').closest('button');
     expect(dayElement).toHaveClass('bg-yellow-200');
   });
 
   it('applies a red color for a day with "no" votes', () => {
     render(<CalendarMonthView allVoteEntries={allDummyVotes} />);
-    const dayElement = screen.getByText('18').closest('div');
+    const dayElement = screen.getByText('18').closest('button');
     expect(dayElement).toHaveClass('bg-red-200');
   });
 
   // New test cases for color priority
   it('applies red for a day with yes, no, and if-need-be votes (Day 1)', () => {
     render(<CalendarMonthView allVoteEntries={allDummyVotes} />);
-    const dayElement = screen.getByText('1').closest('div');
+    const dayElement = screen.getByText('1').closest('button');
     expect(dayElement).toHaveClass('bg-red-200');
   });
 
   it('applies red for a day with yes and no votes (Day 2)', () => {
     render(<CalendarMonthView allVoteEntries={allDummyVotes} />);
-    const dayElement = screen.getByText('2').closest('div');
+    const dayElement = screen.getByText('2').closest('button');
     expect(dayElement).toHaveClass('bg-red-200');
   });
 
   it('applies yellow for a day with yes and if-need-be votes (Day 3)', () => {
     render(<CalendarMonthView allVoteEntries={allDummyVotes} />);
-    const dayElement = screen.getByText('3').closest('div');
+    const dayElement = screen.getByText('3').closest('button');
     expect(dayElement).toHaveClass('bg-yellow-200');
   });
 
   it('applies green for a day with multiple yes votes (Day 4)', () => {
     render(<CalendarMonthView allVoteEntries={allDummyVotes} />);
-    const dayElement = screen.getByText('4').closest('div');
+    const dayElement = screen.getByText('4').closest('button');
     expect(dayElement).toHaveClass('bg-green-200');
   });
 
@@ -107,7 +107,21 @@ describe('CalendarMonthView', () => {
     expect(screen.getByText('December 2025')).toBeInTheDocument();
 
     // Check if colors are still applied
-    const dayElement = screen.getByText('18').closest('div');
+    const dayElement = screen.getByText('18').closest('button');
     expect(dayElement).toHaveClass('bg-red-200');
+  });
+
+  it('calls onDayClick with the correct date when a day is clicked', () => {
+    const handleDayClick = jest.fn();
+    render(<CalendarMonthView allVoteEntries={allDummyVotes} onDayClick={handleDayClick} />);
+
+    // Click on day 18
+    const dayButton = screen.getByText('18').closest('button');
+    if (dayButton) {
+      fireEvent.click(dayButton);
+    }
+
+    expect(handleDayClick).toHaveBeenCalledTimes(1);
+    expect(handleDayClick).toHaveBeenCalledWith('2025-12-18');
   });
 });

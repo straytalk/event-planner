@@ -37,10 +37,11 @@ const getFirstDayOfMonth = (year: number, month: number) => {
 };
 
 interface CalendarMonthViewProps {
-  allVoteEntries?: VoteEntry[]; // Accept raw VoteEntry[]
+  allVoteEntries?: VoteEntry[];
+  onDayClick?: (date: string) => void; // New prop
 }
 
-export function CalendarMonthView({ allVoteEntries = [] }: CalendarMonthViewProps) {
+export function CalendarMonthView({ allVoteEntries = [], onDayClick }: CalendarMonthViewProps) {
   const [currentDate, setCurrentDate] = useState(new Date());
 
   const year = currentDate.getFullYear();
@@ -93,23 +94,26 @@ export function CalendarMonthView({ allVoteEntries = [] }: CalendarMonthViewProp
     for (let day = 1; day <= daysInMonth; day++) {
       const isToday = isCurrentMonth && today.getDate() === day;
       const dayColor = getDayColor(day);
+      const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 
       grid.push(
-        <div
+        <button
           key={day}
-          className={`h-10 flex items-center justify-center text-sm rounded-md transition-colors
+          onClick={() => onDayClick && onDayClick(dateString)}
+          className={`h-10 w-full flex items-center justify-center text-sm rounded-md transition-colors text-foreground
             ${dayColor}
             ${isToday ? 'ring-2 ring-primary' : ''}
             ${dayColor !== 'bg-transparent' ? '' : 'hover:bg-accent hover:text-accent-foreground'}
           `}
+          aria-label={`View votes for ${monthName} ${day}`}
         >
           {day}
-        </div>
+        </button>
       );
     }
     return grid;
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [year, month, daysInMonth, firstDayOfMonth, monthlyVotes]); // Depend on monthlyVotes
+  }, [year, month, daysInMonth, firstDayOfMonth, monthlyVotes, onDayClick]); // Add onDayClick to dependency array
 
   const goToPreviousMonth = () => {
     setCurrentDate((prev) => new Date(prev.getFullYear(), prev.getMonth() - 1, 1));
