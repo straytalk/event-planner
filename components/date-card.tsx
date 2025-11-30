@@ -4,6 +4,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { VoteEntry } from "@/lib/test-data/sample-votes";
 
 export interface VoterResponse {
   name: string;
